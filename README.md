@@ -1,2 +1,2 @@
 # RN_Auth
-An Authentication app from which authenticates from firebase
+An Authentication app from which authenticates email and password using firebase.
