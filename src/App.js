@@ -1,33 +1,34 @@
 import React, {Component} from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, TextInput } from 'react-native';
+import firebase from 'firebase';
+import { Header } from './components/common';
+import LoginForm from './components/LoginForm';
 
 class App extends Component {
+
+  componentWillMount() {
+    firebase.initializeApp({
+        apiKey: 'AIzaSyDx4p2mV_rCqAhTlhMDm5ulHePQN3PaMdg',
+        authDomain: 'authentication-38add.firebaseapp.com',
+        databaseURL: 'https://authentication-38add.firebaseio.com',
+        projectId: 'authentication-38add',
+        storageBucket: 'authentication-38add.appspot.com',
+        messagingSenderId: '314287370088'
+    })
+  }
+
   render() {
     return (
       <View>
-        <Text> Authentication App </Text>
+        <Header headerText = "Authentication"/>
+        <LoginForm/> 
       </View>
     );
   }
 }
 
 const styles = {
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+
 }
 
 export default App
