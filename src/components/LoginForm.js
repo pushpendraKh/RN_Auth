@@ -3,28 +3,56 @@ import { Text } from 'react-native'
 import firebase from 'firebase';
 import { Button, Card, CardSection, Input, Spinner } from './common'
 
-console.log('Button', Button);
-
 class LoginForm extends Component {
 
     state = { 
         email: '',
         password: '',
-        error: ''
+        error: '',
+        loading: false,
     }
 
     onLoginPress() {
         const { email, password } = this.state 
+
         this.setState({error: ''})
+        this.setState({loading: true})
+
         firebase.auth().signInWithEmailAndPassword(email, password)
+            .then(this.onLoginSuccess.bind(this))
             .catch( () => {
                 firebase.auth().createUserWithEmailAndPassword(email, password)
-                    .catch( () => {
-                        this.setState({
-                            error: 'Authentication failed.'
-                        })
-                    })
+                    .then(this.onLoginSuccess.bind(this))
+                    .catch(this.onLoginFail.bind(this))
             })
+    }
+
+    onLoginSuccess() {
+        this.setState({
+            email: '',
+            password: '',
+            error: '',
+            loading: false,
+        })
+    }
+
+    onLoginFail() {
+        this.setState({
+            error: 'Authentication failed.',
+            loading: false,
+        })
+    }
+
+    renderButton() {
+        if (this.state.loading) {
+            return <Spinner size='small'/>
+        } else {
+            return(
+                <Button onPress={this.onLoginPress.bind(this)}>
+                    Log In
+                </Button> 
+            )  
+        }
     }
 
     render() {
@@ -53,10 +81,8 @@ class LoginForm extends Component {
                     { this.state.error }
                 </Text>    
 
-                <CardSection>
-                    <Button onPress={this.onLoginPress.bind(this)}>
-                         Log In
-                    </Button>
+                <CardSection> 
+                    { this.renderButton() }
                 </CardSection>
             </Card>    
         )
